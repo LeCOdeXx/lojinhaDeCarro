@@ -1,7 +1,9 @@
 package application;
 
 import java.util.List;
+import java.util.Scanner;
 
+import exception.ProgramException;
 import p.enums.Rank;
 import p.enums.Usuario;
 import veiculos.marca.Marca;
@@ -13,6 +15,7 @@ public class UI extends Veiculo {
 	private Modelo modelo;
 	private Veiculo veiculo;
 	Usuario usuario = new Usuario();
+	private Scanner sc;
 
 ////// SETTERS
 	public void setMarca(String novaMarca) {
@@ -74,6 +77,67 @@ public class UI extends Veiculo {
 
 	public UI() {
 		super();
+	}
+	
+	public void testeSenha(String resposta) {
+		sc = new Scanner(System.in);
+		if (!resposta.equals("SIM") && !resposta.equals("sim") && !resposta.equals("NAO")
+				&& !resposta.equals("nao")) {
+			extracted();
+		}
+		
+		if (resposta.equals("SIM") || resposta.equals("sim")) {
+			usuario(Rank.CLIENTE);
+		} 
+		
+		else if (resposta.equals("NAO") || resposta.equals("nao")) {
+			System.out.print("Digite a senha: ");
+			String senha = sc.nextLine();
+			if (rank(senha)) {
+				usuario(Rank.GERENTE);
+			}
+			
+			else {
+				System.out.println("Senha incorreta");
+			}
+		}
+	}
+	
+	public void argumentosDeGerente(int resposta2) {
+		if (resposta2 == 1) {
+			for (int i = 0; i < getList().size(); i++) {
+				System.out.println("Marca: " + getList().get(i).getMarca());
+				System.out.println("Modelo: " + getList().get(i).getModelo());
+				System.out.println("Chassi: " + getList().get(i).getChassi());
+				System.out.println("Valor: " + getList().get(i).getValor());
+			}
+		}
+		if (resposta2 == 2) {
+			for (int i = 0; i < getList().size(); i++) {
+				System.out.println("Modelo: " + getList().get(i).getModelo() + " Marca: "
+						+ getList().get(i).getMarca() + " ID: " + getList().get(i).getID());
+			}
+			System.out.println();
+			System.out.print("Qual voce deseja modificar?");
+			int escolha = sc.nextInt();
+			for (int i = 0; i < getList().size(); i++) {
+
+				if (escolha == getList().get(i).getID()) {
+					System.out.print("Digite um novo valor: ");
+					Double valor = sc.nextDouble();
+					getList().get(i).setValor(valor);
+					System.out.println("Marca: " + getList().get(i).getMarca());
+					System.out.println("Modelo: " + getList().get(i).getModelo());
+					System.out.println("Chassi: " + getList().get(i).getChassi());
+					System.out.println("Valor: " + getList().get(i).getValor());
+
+				}
+			}
+		}
+	}
+	//Extracted da excessao de argumentos invalidos
+	private void extracted() {
+		throw new ProgramException("Voce esta digitando algo invalido");
 	}
 
 }
