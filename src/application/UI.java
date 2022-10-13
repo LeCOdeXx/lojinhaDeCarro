@@ -17,6 +17,30 @@ public class UI extends Veiculo {
 	Usuario usuario = new Usuario();
 	private Scanner sc;
 
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_WHITE = "\u001B[37m";
+
+	public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+	public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+	public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+	public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+	public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+	public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+	public void limparTela() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
 ////// SETTERS
 	public void setMarca(String novaMarca) {
 		if (getUsuario() == Rank.GERENTE) {
@@ -78,30 +102,52 @@ public class UI extends Veiculo {
 	public UI() {
 		super();
 	}
-	
-	public void testeSenha(String resposta) {
+
+	public void testeUsuario() {
 		sc = new Scanner(System.in);
-		if (!resposta.equals("SIM") && !resposta.equals("sim") && !resposta.equals("NAO")
-				&& !resposta.equals("nao")) {
-			extracted();
-		}
-		
-		if (resposta.equals("SIM") || resposta.equals("sim")) {
-			usuario(Rank.CLIENTE);
-		} 
-		
-		else if (resposta.equals("NAO") || resposta.equals("nao")) {
-			System.out.print("Digite a senha: ");
-			String senha = sc.nextLine();
-			if (rank(senha)) {
-				usuario(Rank.GERENTE);
+		int xa = 1;
+		try {
+			while (xa == 1) {
+				String resposta = sc.nextLine();
+				if (!resposta.equals("SIM") && !resposta.equals("sim") && !resposta.equals("NAO")
+						&& !resposta.equals("nao")) {
+					extracted();
+				}
+
+				if (resposta.equals("SIM") || resposta.equals("sim")) {
+					usuario(Rank.CLIENTE);
+					xa = 2;
+				}
+
+				else if (resposta.equals("NAO") || resposta.equals("nao")) {
+					System.out.print("Digite a senha: ");
+					String senha = sc.nextLine();
+					if (rank(senha)) {
+						usuario(Rank.GERENTE);
+						xa = 2;
+					}
+
+					else {
+						System.out.println("Senha incorreta");
+						System.out.println("DIGITE QUALQUER COISA PARA RETORNAR!!");
+						sc.nextLine();
+						xa = 2;
+					}
+				}
 			}
-			
-			else {
-				System.out.println("Senha incorreta");
-			}
+		} catch (ProgramException e) {
+			System.out.println();
+			System.out.println("INTEGRIDADE CORROMPIDA: " + e.getMessage());
+			System.out.println("DIGITE QUALQUER COISA PARA RETORNAR!!");
+			sc.nextLine();
+			System.out.println();
+			limparTela();
 		}
 	}
+
+	
+	
+	.
 	
 	public void argumentosDeGerente(int resposta2) {
 		if (resposta2 == 1) {
@@ -114,8 +160,8 @@ public class UI extends Veiculo {
 		}
 		if (resposta2 == 2) {
 			for (int i = 0; i < getList().size(); i++) {
-				System.out.println("Modelo: " + getList().get(i).getModelo() + " Marca: "
-						+ getList().get(i).getMarca() + " ID: " + getList().get(i).getID());
+				System.out.println("Modelo: " + getList().get(i).getModelo() + " Marca: " + getList().get(i).getMarca()
+						+ " ID: " + getList().get(i).getID());
 			}
 			System.out.println();
 			System.out.print("Qual voce deseja modificar?");
@@ -135,7 +181,8 @@ public class UI extends Veiculo {
 			}
 		}
 	}
-	//Extracted da excessao de argumentos invalidos
+
+	// Extracted da excessao de argumentos invalidos
 	private void extracted() {
 		throw new ProgramException("Voce esta digitando algo invalido");
 	}
