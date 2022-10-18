@@ -147,15 +147,19 @@ public class UI extends Veiculo {
 
 	
 	
-	.
+	
 	
 	public void argumentosDeGerente(int resposta2) {
 		if (resposta2 == 1) {
 			for (int i = 0; i < getList().size(); i++) {
+				System.out.println(ANSI_BLUE + "Lista de veiculos" + ANSI_RESET);
 				System.out.println("Marca: " + getList().get(i).getMarca());
 				System.out.println("Modelo: " + getList().get(i).getModelo());
 				System.out.println("Chassi: " + getList().get(i).getChassi());
 				System.out.println("Valor: " + getList().get(i).getValor());
+				System.out.println();
+				System.out.println("Digite qualquer tecla para continuar!");
+				sc.nextLine();
 			}
 		}
 		if (resposta2 == 2) {
